@@ -18,7 +18,7 @@ func _on_body_entered(body: Node2D) -> void:
 	
 	# Calculate elapsed time
 	var elapsed_time = (Time.get_ticks_msec() - start_time) / 1000.0
-	var rounded_time = snapped(elapsed_time, 1) #0.1 = zaokhroulit na desetiny
+	var rounded_time = snapped(elapsed_time, 0.1) #0.1 = zaokhroulit na desetiny
 	
 	print("\nGoodgame")
 	print("Time taken to collect the cherry: " + str(rounded_time) + " seconds")
@@ -37,7 +37,9 @@ func _on_body_entered(body: Node2D) -> void:
 
 func send_score_to_server(score: float):
 	# Use your EXACT server address here - this is just an example
-	var url = "http://dbs.spskladno.cz:5000/update_score_Liskahra"
+	# In Godot, ensure URL is EXACTLY:
+	var url = "http://127.0.0.1:5000/update_score_Liskahra"
+	# Not http://127.0.0.1 or any variation
 	var headers = ["Content-Type: application/json"]
 	var body = JSON.stringify({
 		"username": GlobalVar.username,
@@ -61,11 +63,11 @@ func send_score_to_server(score: float):
 		print("✅ Request sent successfully")
 
 func _on_http_request_completed(result, response_code, headers, body):
-	print("\nHTTP Request Completed:")
-	print("Result: ", result)
-	print("Status Code: ", response_code)
-	print("Headers: ", headers)
-	print("Body: ", body.get_string_from_utf8())
+	print("\nFull response:")
+	print("Result:", result)
+	print("Code:", response_code)
+	print("Headers:", headers)
+	print("Body:", body.get_string_from_utf8())
 	
 	if result != HTTPRequest.RESULT_SUCCESS:
 		print("❌ Request failed completely")
@@ -73,20 +75,11 @@ func _on_http_request_completed(result, response_code, headers, body):
 		
 	match response_code:
 		200:
-			print("✅ Score updated successfully!")
-			var json = JSON.new()
-			var parse_result = json.parse(body.get_string_from_utf8())
-			if parse_result == OK:
-				var response = json.get_data()
-				print("Server response: ", response)
-			else:
-				print("❌ Failed to parse server response")
+			print("✅ Success!")
 		404:
-			print("❌ Endpoint not found (check your URL path)")
-		500:
-			print("❌ Server error (check Flask server logs)")
+			print("❌ Endpoint not found (check Flask routes)")
 		_:
-			print("❌ Unexpected status code: ", response_code)
+			print("❌ Unexpected response")
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if animated_sprite.animation == "Collect":
