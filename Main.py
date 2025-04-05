@@ -39,17 +39,23 @@ def check_password(password, hashed_password):
     return bcrypt.checkpw(password.encode(), hashed_password.encode())
 
 # ... after database connection ...
+try:
+    cursor.execute("""
+        SELECT update_priv 
+        FROM mysql.db 
+        WHERE Db = 'vyuka20' AND User = 'student20'
+    """)
+    print("\n🔐 Update Permissions:", cursor.fetchone())
+except Exception as e:
+    print("❌ Permission check failed:", e)
 
-
-@application.route("/get_users_Liskahra", methods=["GET"])
-def get_users():
-    """Get all users and their scores"""
-    try:
-        cursor.execute("SELECT username, score FROM Liskahra")
-        users = cursor.fetchall()
-        return jsonify({"success": True, "users": users}), 200
-    except mysql.connector.Error as err:
-        return jsonify({"error": str(err)}), 500
+try:
+    cursor.execute("SHOW GRANTS FOR CURRENT_USER")
+    print("\n🔐 Database Permissions:")
+    for grant in cursor.fetchall():
+        print(grant["Grants"])
+except Exception as e:
+    print(f"❌ Permission check failed: {e}")
 
 
 @application.route("/register_Liskahra", methods=["POST"])
@@ -64,9 +70,15 @@ def register():
     if not username or not password:
         return jsonify({"error": "Username and password are required"}), 400
 
-    hashed_password = hash_password(password)
-
     try:
+        # 🔍 Check if user already exists
+        cursor.execute("SELECT username FROM Liskahra WHERE username = %s", (username,))
+        if cursor.fetchone():
+            print(f"⚠️ User '{username}' already exists")
+            return jsonify({"error": "User already exists"}), 409  # Conflict
+
+        # ✅ Register new user
+        hashed_password = hash_password(password)
         cursor.execute(
             "INSERT INTO Liskahra (username, password, score) VALUES (%s, %s, 0)",
             (username, hashed_password)
@@ -78,9 +90,11 @@ def register():
             "message": "User registered",
             "username": username
         }), 201
+
     except mysql.connector.Error as err:
         print(f"❌ Registration error: {err}")
         return jsonify({"error": str(err)}), 500
+
 
 
 @application.route("/login_Liskahra", methods=["POST"])
@@ -122,85 +136,68 @@ def login():
         return jsonify({"error": str(err)}), 500
 
 
+@application.before_request
+def log_request():
+    print(f"\n📨 Incoming {request.method} request to {request.path}")
+    print("Headers:", dict(request.headers))
+    print("Body:", request.get_data(as_text=True))
+
+
 @application.route("/update_score_Liskahra", methods=["POST"])
 def update_score():
-    """Update user score"""
     data = request.get_json()
-    print(f"\n🎯 Score update request: {data}")  # Debug
-
-    if not data:
-        print("❌ No JSON data received")
-        return jsonify({"error": "No JSON data received"}), 400
-
-    username = data.get("username")
-    new_score = data.get("score")
-
-    if not username or new_score is None:
-        print("❌ Missing username or score")
-        return jsonify({"error": "Both username and score are required"}), 400
+    print(f"\n🎯 Score update request: {data}")
 
     try:
-        # Verify user exists first
-        cursor.execute("SELECT username FROM Liskahra WHERE username = %s", (username,))
-        if not cursor.fetchone():
-            print(f"❌ User '{username}' not found in database")
+        username = data['username']
+        new_score = float(data['score'])
+
+        # Get fresh connection
+        db = mysql.connector.connect(
+            host="dbs.spskladno.cz",
+            user="student20",
+            password="spsnet",
+            database="vyuka20"
+        )
+        cursor = db.cursor(dictionary=True)
+
+        # 1. Get current score
+        cursor.execute("SELECT score FROM Liskahra WHERE username = %s", (username,))
+        current = cursor.fetchone()
+
+        if not current:
+            db.close()
             return jsonify({"error": "User not found"}), 404
 
-        # Convert score to float to ensure proper storage/ po tom ig, ted ten server stoji za starou backoru
-        score_value = int(new_score)
+        current_score = current['score'] or float('inf')  # Handle NULL as infinite
 
-        # Update score
-        cursor.execute(
-            "UPDATE Liskahra SET score = %s WHERE username = %s",
-            (score_value, username)
-        )
-        database.commit()
+        # 2. Only update if new score is better (lower time)
+        if new_score < current_score:
+            cursor.execute(
+                "UPDATE Liskahra SET score = %s WHERE username = %s",
+                (new_score, username)
+            )
+            db.commit()
+            message = "New high score!"
+        else:
+            message = "Score not improved"
 
-        # Verify update
+        # 3. Return verification
         cursor.execute("SELECT score FROM Liskahra WHERE username = %s", (username,))
-        updated_score = cursor.fetchone()["score"]
+        result = cursor.fetchone()
+        db.close()
 
-        print(f"✅ Updated '{username}' score to {updated_score}")
         return jsonify({
             "success": True,
-            "message": "Score updated",
-            "username": username,
-            "new_score": updated_score
+            "message": message,
+            "new_score": result['score'],
+            "was_updated": new_score < current_score
         }), 200
 
-    except ValueError:
-        print(f"❌ Invalid score value: {new_score}")
-        return jsonify({"error": "Score must be a number"}), 400
-    except mysql.connector.Error as err:
-        database.rollback()
-        print(f"❌ Database error: {err}")
-        return jsonify({"error": str(err)}), 500
-    except Exception as err:
-        database.rollback()
-        print(f"❌ Unexpected error: {err}")
-        return jsonify({"error": str(err)}), 500
-
-
-@application.route("/get_leaderboard", methods=["GET"])
-def get_leaderboard():
-    """Get top 10 scores"""
-    try:
-        cursor.execute("""
-            SELECT username, score 
-            FROM Liskahra 
-            WHERE score > 0
-            ORDER BY score ASC 
-            LIMIT 10
-        """)
-        leaderboard = cursor.fetchall()
-        return jsonify({
-            "success": True,
-            "leaderboard": leaderboard
-        }), 200
-    except mysql.connector.Error as err:
-        print(f"❌ Leaderboard error: {err}")
-        return jsonify({"error": str(err)}), 500
-
+    except Exception as e:
+        db.rollback()
+        print(f"❌ Error: {str(e)}")
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
     # Print table structure at startup
