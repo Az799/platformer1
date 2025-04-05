@@ -891,7 +891,7 @@ position = Vector2(546.049, 353.641)
 shape = SubResource("RectangleShape2D_sv1m6")
 
 [node name="The Cherry" parent="." instance=ExtResource("21_a8wo8")]
-position = Vector2(175, -58)
+position = Vector2(372, -378)
 collision_mask = 2
 
 [node name="Label" type="Label" parent="."]
