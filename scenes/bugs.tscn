@@ -1,0 +1,58 @@
+[gd_scene load_steps=8 format=3 uid="uid://dch4rcq7dvsq1"]
+
+[ext_resource type="Texture2D" uid="uid://cyt22gotj0m06" path="res://assets/Sunny Land Collection Files/Assets/Characters/Enemies and NPC/Bettle/spritesheet.png" id="1_sro7g"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ejuet"]
+atlas = ExtResource("1_sro7g")
+region = Rect2(0, 0, 36, 39)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o25k0"]
+atlas = ExtResource("1_sro7g")
+region = Rect2(36, 0, 36, 39)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ylok0"]
+atlas = ExtResource("1_sro7g")
+region = Rect2(72, 0, 36, 39)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e2a1n"]
+atlas = ExtResource("1_sro7g")
+region = Rect2(108, 0, 36, 39)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dnbmw"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ejuet")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o25k0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ylok0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e2a1n")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_rg2xj"]
+radius = 11.0
+height = 22.0
+
+[node name="Bug" type="Area2D"]
+collision_mask = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_dnbmw")
+frame = 1
+frame_progress = 0.922976
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 6)
+shape = SubResource("CapsuleShape2D_rg2xj")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="ready" from="." to="." method="_on_ready"]

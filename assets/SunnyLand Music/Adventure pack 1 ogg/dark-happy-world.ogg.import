@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dma0drkmrw84l"
+path="res://.godot/imported/dark-happy-world.ogg-b5e23d126ab23175b866dc7d3ae29ada.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/SunnyLand Music/Adventure pack 1 ogg/dark-happy-world.ogg"
+dest_files=["res://.godot/imported/dark-happy-world.ogg-b5e23d126ab23175b866dc7d3ae29ada.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

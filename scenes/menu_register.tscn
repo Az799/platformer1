@@ -1,0 +1,68 @@
+[gd_scene load_steps=4 format=3 uid="uid://cgpo5owhn7m74"]
+
+[ext_resource type="Script" uid="uid://b3llefwa24ar1" path="res://scripts/menu_register.gd" id="1_vyu0f"]
+[ext_resource type="Texture2D" uid="uid://dw1tona3wxbdj" path="res://assets/zz2.png" id="2_maigx"]
+[ext_resource type="Theme" uid="uid://dstbt3blocg8x" path="res://scenes/menu.tres" id="3_xrf8m"]
+
+[node name="Menu-register" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_vyu0f")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -576.5
+offset_top = -325.5
+offset_right = 576.5
+offset_bottom = 325.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_maigx")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -142.0
+offset_top = -268.0
+offset_right = 143.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("3_xrf8m")
+
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
+layout_mode = 2
+placeholder_text = "username"
+
+[node name="LineEdit2" type="LineEdit" parent="VBoxContainer"]
+layout_mode = 2
+placeholder_text = "password"
+
+[node name="Register" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Register"
+
+[node name="Back" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Back"
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="HTTPRequest" type="HTTPRequest" parent="VBoxContainer"]
+
+[connection signal="pressed" from="VBoxContainer/Register" to="." method="_on_register_pressed"]
+[connection signal="pressed" from="VBoxContainer/Back" to="." method="_on_back_pressed"]
+[connection signal="request_completed" from="VBoxContainer/HTTPRequest" to="." method="_on_http_request_request_completed"]

@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://sx1ud1ii0436"]
+
+[ext_resource type="Texture2D" uid="uid://c5nxysltk80ju" path="res://assets/big-crate.png" id="1_ba0x2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qc0bc"]
+size = Vector2(36, 32)
+
+[node name="Platform" type="AnimatableBody2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.992776, 1.04908)
+texture = ExtResource("1_ba0x2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_qc0bc")
+one_way_collision = true

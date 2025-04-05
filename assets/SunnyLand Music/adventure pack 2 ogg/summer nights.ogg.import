@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://cyx38ai85jou8"
+path="res://.godot/imported/summer nights.ogg-d22961f055c9bea8bccb60868b53ffcf.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/SunnyLand Music/adventure pack 2 ogg/summer nights.ogg"
+dest_files=["res://.godot/imported/summer nights.ogg-d22961f055c9bea8bccb60868b53ffcf.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

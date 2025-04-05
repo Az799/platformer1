@@ -1,0 +1,34 @@
+[gd_scene load_steps=5 format=3 uid="uid://wohl67rfru2g"]
+
+[ext_resource type="Texture2D" uid="uid://cfl221nwgr6t4" path="res://assets/balloon-custom.png" id="1_tpd1t"]
+[ext_resource type="Texture2D" uid="uid://buhkt7xsj4o0v" path="res://assets/balloon-custom-basket.png" id="2_1eawp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1eawp"]
+size = Vector2(20, 2)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bjw4k"]
+size = Vector2(2, 10)
+
+[node name="Balloon" type="AnimatableBody2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_tpd1t")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+z_index = 6
+texture = ExtResource("2_1eawp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 6
+position = Vector2(0, 29)
+shape = SubResource("RectangleShape2D_1eawp")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
+z_index = 6
+position = Vector2(-11, 25)
+shape = SubResource("RectangleShape2D_bjw4k")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="."]
+z_index = 6
+position = Vector2(11, 25)
+shape = SubResource("RectangleShape2D_bjw4k")

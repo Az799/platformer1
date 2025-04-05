@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://dk638abo2v56h"]
+
+[ext_resource type="Texture2D" uid="uid://dyhdbsglwh0u2" path="res://assets/door.png" id="1_r1kmm"]
+
+[sub_resource type="ConvexPolygonShape2D" id="ConvexPolygonShape2D_5434c"]
+points = PackedVector2Array(-2, 54.3432, 512, 54.2373, 512, -54.2373, -512, -54.2373, -512, 54.2373)
+
+[node name="test_block_door" type="AnimatableBody2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-0.499967, 0.999703)
+scale = Vector2(2.62308, 2.10246)
+texture = ExtResource("1_r1kmm")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1.49012e-05)
+scale = Vector2(1, 9.44)
+shape = SubResource("ConvexPolygonShape2D_5434c")
