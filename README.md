@@ -14,7 +14,9 @@
 
 
 ## 📂 Project Structure
+```
 your-game/
+│
 ├── godot-project/          # All Godot-related files
 │   ├── assets/             # Sprites, sounds, etc.
 │   ├── scenes/             # Godot scene files (.tscn)
@@ -29,7 +31,7 @@ your-game/
 │   └── .venv               # IDE config
 │
 └── README.md               # Updated documentation
-
+```
 
 ## ⚠️ Requirements
 
@@ -46,73 +48,9 @@ your-game/
 2. Run the main scene (F5)
 
 ### Flask Server
-```bash
+bash
 cd flask-backend
 python -m venv .venv  # Create virtual environment
 
 # On Windows:
 .venv\Scripts\activate
-# On Mac/Linux:
-source .venv/bin/activate
-
-pip install -r requirements.txt
-python main.py
-
-
-🔧 Configuration
-File	Purpose
-godot-project/scripts/Global.gd	Game API URL
-flask-backend/main.py	Server port & database config
-🌐 API Endpoints
-Route	Method	Description
-/update_score	POST	Save player score
-/get_leaderboard	GET	Retrieve top scores
-💡 Troubleshooting
-Godot can't find files?
-
-Use "Import Project" instead of "New Project"
-
-Ensure all paths are relative (e.g., res://assets/sprite.png)
-
-Flask server not starting?
-
-Check port 5000 isn't blocked
-
-Verify Python version with python --version
-
-📜 License
-MIT License - See LICENSE file (create one if needed)
-
-Note: The .idea and .venv folders should be added to your .gitignore!
-
-Copy
-
-### How to use:
-1. Copy this entire code block
-2. Create a new `README.md` file in your project root
-3. Paste the content
-4. Commit and push to GitHub
-
-The rendered version will show:
-- Professional badges
-- Perfectly formatted folder tree
-- Responsive tables
-- Code blocks with syntax highlighting
-- Warning callouts
-
-For a matching `.gitignore`, add this in your root directory:
-
-```gitignore
-# Godot
-.godot/
-import/
-
-# Python
-__pycache__/
-*.py[cod]
-.venv/
-
-# IDE
-.idea/
-.vscode/
-*.swp
