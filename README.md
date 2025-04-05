@@ -42,15 +42,21 @@ your-game/
 | PyCharm (Recommended) | Python IDE | [jetbrains.com](https://www.jetbrains.com/pycharm/) |
 
 ## 🚀 Setup Guide
+put everything but the `Main.py` into a folder named "platformer1" <br>
+with `Main.py` create a flask server
 
 ### Godot Client
-1. Open `godot-project/project.godot` in Godot Editor
+1. Open `"path/platformer1"` in Godot Editor
 2. Run the main scene (F5)
 
 ### Flask Server
-bash
-cd flask-backend
-python -m venv .venv  # Create virtual environment
+```bash
 
+pip install flask
+pip install bcrypt
+pip install mysql-connector-python
+```
 # On Windows:
+```
 .venv\Scripts\activate
+```
