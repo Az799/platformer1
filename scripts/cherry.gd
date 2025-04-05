@@ -36,10 +36,7 @@ func _on_body_entered(body: Node2D) -> void:
 		print("User not logged in, score not sent to server")
 
 func send_score_to_server(score: float):
-	# Use your EXACT server address here - this is just an example
-	# In Godot, ensure URL is EXACTLY:
 	var url = "http://127.0.0.1:5000/update_score_Liskahra"
-	# Not http://127.0.0.1 or any variation
 	var headers = ["Content-Type: application/json"]
 	var body = JSON.stringify({
 		"username": GlobalVar.username,
@@ -73,13 +70,22 @@ func _on_http_request_completed(result, response_code, headers, body):
 		print("❌ Request failed completely")
 		return
 		
-	match response_code:
-		200:
-			print("✅ Success!")
-		404:
-			print("❌ Endpoint not found (check Flask routes)")
-		_:
-			print("❌ Unexpected response")
+	var json = JSON.new()
+	if json.parse(body.get_string_from_utf8()) == OK:
+		var response = json.get_data()
+		
+		match response_code:
+			200:
+				if response.get("was_updated", false):
+					print("✅ New high score saved:", response["new_score"])
+					label.text = "New record: " + str(response["new_score"])
+				else:
+					print("ℹ️ Score not improved")
+					label.text = "Good try! (Best: " + str(response["new_score"]) + ")"
+			404:
+				print("❌ Endpoint not found")
+			_:
+				print("❌ Unexpected response")
 
 func _on_animated_sprite_2d_animation_finished() -> void:
 	if animated_sprite.animation == "Collect":
