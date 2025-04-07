@@ -10,7 +10,7 @@
 - [Godot Engine](https://godotengine.org/download) (Latest stable version)
 - [PyCharm Community](https://www.jetbrains.com/pycharm/download/) (or any Python IDE)
 
-> ❗ Without these tools, the project **will not work** properly.
+> ❗ Without these tools, the project **will not work**.
 
 
 ## 📂 Project Structure
